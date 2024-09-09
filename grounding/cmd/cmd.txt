@@ -1,0 +1,12 @@
+Environment parameter
+CUDA_VISIBLE_DEVICES=2,3;TOKENIZERS_PARALLELISM=(true | false)
+
+# finetune
+--nproc_per_node=2  tools/finetune.py       --config-file configs/refcoco/finetune_A.yaml --skip-test       --custom_shot_and_epoch_and_general_copy 0_1_1       --evaluate_only_best_on_test --push_both_val_and_test
+
+# inference
+python   tools/testgrounding_net.py         --config-file configs/refcoco/refcoco.yaml         --task_config configs/refcoco/val.yaml         --weight MODEL/glip_a_tiny_o365.pth         OUTPUT_DIR ./ TEST.IMS_PER_BATCH 1 SOLVER.IMS_PER_BATCH 1 TEST.EVAL_TASK grounding
+
+python  -m torch.distributed.launch --nproc_per_node=2  tools/testgrounding_net.py         --config-file configs/refcoco/refcoco.yaml         --task_config configs/refcoco/val.yaml         --weight MODEL/glip_a_tiny_o365.pth         OUTPUT_DIR ./ TEST.IMS_PER_BATCH 2 SOLVER.IMS_PER_BATCH 1 TEST.EVAL_TASK grounding
+
+python -m torch.distributed.launch --nproc_per_node=2  tools/finetune.py       --config-file configs/refcoco/finetune_A.yaml --skip-test       --custom_shot_and_epoch_and_general_copy 0_5_1

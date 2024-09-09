@@ -1,0 +1,71 @@
+*.egg-info
+*.pyc
+build/
+DATASET/
+OUTPUT/
+MODEL/
+best_model/
+all_key/
+OUTPUT_org
+
+# compilation and distribution
+__pycache__
+_ext
+*.so
+maskrcnn_benchmark.egg-info/
+dist/
+
+# pytorch/python/numpy formats
+*.pth
+*.pkl
+*.npy
+
+# ipython/jupyter notebooks
+*.ipynb
+**/.ipynb_checkpoints/
+
+# Editor temporaries
+*.swn
+*.swo
+*.swp
+*~
+
+# Pycharm editor settings
+.idea
+
+# vscode editor settings
+.vscode
+
+# MacOS
+.DS_Store
+
+# Custom
+*.custom.py
+
+# logs
+logs/
+log_new/
+
+# res
+FINAL_RES/
+FINAL_RES_v2/
+eval/
+
+# visualize
+visualize_base/
+visualize_glip/
+visualize_lpi/
+visualize_lpi_v2/
+visualize_maple/
+visualize_sprompts/
+
+# task_div
+TASK_DIV/
+TASK_DIV_REFCOCO/
+
+# prompt_save
+prompt_save/
+
+# embedding save
+embedding_save/
+

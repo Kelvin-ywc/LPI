@@ -1,25 +1,25 @@
 # grounding
-prompt_grounding/*.egg-info
-prompt_grounding/*.pyc
-prompt_grounding/build/
-prompt_grounding/DATASET/
-prompt_grounding/OUTPUT/
-prompt_grounding/MODEL/
-prompt_grounding/best_model/
-all_key/
-prompt_grounding/OUTPUT_org
+grounding/*.egg-info
+grounding/*.pyc
+grounding/build/
+grounding/DATASET/
+grounding/OUTPUT/
+grounding/MODEL/
+grounding/best_model/
+grounding/all_key/
+grounding/OUTPUT_org
 
 # compilation and distribution
 __pycache__
 _ext
 *.so
-prompt_grounding/maskrcnn_benchmark.egg-info/
-prompt_grounding/dist/
+grounding/maskrcnn_benchmark.egg-info/
+grounding/dist/
 
 # pytorch/python/numpy formats
-prompt_grounding/*.pth
-prompt_grounding/*.pkl
-prompt_grounding/*.npy
+grounding/*.pth
+grounding/*.pkl
+grounding/*.npy
 
 # ipython/jupyter notebooks
 *.ipynb
@@ -48,32 +48,32 @@ logs/
 log_new/
 
 # res
-prompt_grounding/FINAL_RES/
-prompt_grounding/FINAL_RES_v2/
-prompt_grounding/eval/
+grounding/FINAL_RES/
+grounding/FINAL_RES_v2/
+grounding/eval/
 
 # visualize
-prompt_grounding/visualize_base/
-prompt_grounding/visualize_glip/
-prompt_grounding/visualize_lpi/
-prompt_grounding/visualize_lpi_v2/
-prompt_grounding/visualize_maple/
-prompt_grounding/visualize_sprompts/
+grounding/visualize_base/
+grounding/visualize_glip/
+grounding/visualize_lpi/
+grounding/visualize_lpi_v2/
+grounding/visualize_maple/
+grounding/visualize_sprompts/
 
 # task_div
-prompt_grounding/TASK_DIV/
-prompt_grounding/TASK_DIV_REFCOCO/
+grounding/TASK_DIV/
+grounding/TASK_DIV_REFCOCO/
 
 # prompt_save
-prompt_save/prompt_grounding/
+grounding/prompt_save/prompt_grounding/
 
 # embedding save
-prompt_grounding/embedding_save/
+grounding/embedding_save/
 
 # retrieval
 __pycache__
 .idea/
-S-Prompts-lpi/logs/
-S-Prompts-lpi/logss/
-S-Prompts-lpi/res/
-S-Prompts-lpi/.vscode/
+retrieval/logs/
+retrieval/logss/
+retrieval/res/
+retrieval/.vscode/
