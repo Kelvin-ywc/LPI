@@ -7,7 +7,9 @@ The code for referring expression comprehension(grounding) is based on [GLIP](ht
 # Image-text Retrieval
 Annotations for image-text retrieval task is preprocessed based on the original annotations, which is available at the following Baidu Cloud link: https://pan.baidu.com/s/17wD4O8OwQSeV4qgBAIX4qQ?pwd=f0yv.
 
-Run the following command for lpi. When the batch size is set to 64 and the prompt depth is set to 3, 7159MB of GPU memory is required. 
+Run the following command for lpi. When the batch size is set to 64 and the prompt depth is set to 3. 
+
+7159MB of GPU memory is required. 
 For the retrieval task, only single GPU operation is supported.
 
 ```
@@ -18,6 +20,13 @@ sh script/retrieval/lpi.sh
 The results are generated in the retrieval/res directory, and post-processing of the results is performed using retrieval/res_handle/reshandle.py.
 
 <!-- Some bugs need to be fixed... -->
+# Referring Expression Comprehension
+Run the following command for website playground.
+```
+python grounding/webui/index.py
+```
+The playground's running results are shown as follows.
+![webui](./assets/webui.png)
 
 # Quickstart
 To quickly illustrate our work, we present the core code below. Cross-modal and inter-task interactions are further enhanced based on this foundation using contrastive learning and interaction networks to achieve improved performance.
