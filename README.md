@@ -15,3 +15,47 @@ For the retrieval task, only single GPU operation is supported.
 sh script/retrieval/lpi.sh
 ```
 <!-- Some bugs need to be fixed... -->
+
+# Quickstart
+To quickly illustrate our work, we present the core code below. Cross-modal and inter-task interactions are further enhanced based on this foundation using contrastive learning and interaction networks to achieve improved performance.
+```
+import torch
+from torch import nn
+
+class DecomposedPrompt(nn.Module):
+    def __init__(self, layer_num, prompt_num, prompt_depth_vis, prompt_depth_text, r=4):
+        super().__init__()
+        self.d = r
+
+        self.dim_1_share = nn.Parameter(torch.randn(layer_num, self.d))
+        self.dim_2_visual = nn.Parameter(torch.randn(prompt_num,self.d))
+        self.dim_2_textual = nn.Parameter(torch.randn(prompt_num,self.d))
+        self.dim_3_visual = nn.Parameter(torch.rand(prompt_depth_vis, self.d))
+        self.dim_3_textual = nn.Parameter(torch.rand(prompt_depth_text, self.d))
+
+        nn.init.normal_(self.dim_1_share, std=0.5)
+        nn.init.normal_(self.dim_2_visual, std=0.5)
+        nn.init.normal_(self.dim_2_textual, std=0.5)
+        nn.init.normal_(self.dim_3_visual, std=0.5)
+        nn.init.normal_(self.dim_3_textual, std=0.5)
+        # self.layerNorm = nn.LayerNorm(prompt_depth)
+        self.scale = 1
+
+    def forward(self):
+        # d1
+        dim_1_share = self.dim_1_share.view(-1,1,1,self.d)
+        # d2
+        dim_2_visual = self.dim_2_visual.view(1, -1, 1, self.d)
+        dim_2_textual = self.dim_2_textual.view(1, -1, 1, self.d)
+        # d3
+        dim_3_visual = self.dim_3_visual.view(1, 1, -1, self.d)
+        dim_3_textual = self.dim_3_textual.view(1, 1, -1, self.d)
+
+        decomposed_prompt_visual = torch.mul(torch.mul(dim_1_share, dim_2_visual), dim_3_visual)
+        decomposed_prompt_visual = torch.mean(decomposed_prompt_visual, dim=3)*self.scale
+
+        decomposed_prompt_textual = torch.mul(torch.mul(dim_1_share, dim_2_textual), dim_3_textual)
+        decomposed_prompt_textual = torch.mean(decomposed_prompt_textual, dim=3)*self.scale
+
+        return decomposed_prompt_visual, decomposed_prompt_textual
+```
