@@ -14,6 +14,9 @@ For the retrieval task, only single GPU operation is supported.
 # LPI
 sh script/retrieval/lpi.sh
 ```
+
+The results are generated in the retrieval/res directory, and post-processing of the results is performed using retrieval/res_handle/reshandle.py.
+
 <!-- Some bugs need to be fixed... -->
 
 # Quickstart
