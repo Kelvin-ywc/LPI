@@ -132,31 +132,37 @@ class SliNet(nn.Module):
         text_features = self.text_encoder(text_prompts, tokenized_prompts, textual_prompt_exp)
         text_features = text_features / text_features.norm(dim=-1, keepdim=True)
 
+        return image_features, text_features, visual_prompt_exp, textual_prompt_exp
+    
+    def cal_loss(self, image_featuers, text_features, visual_prompt, textual_prompt):
         logit_scale = self.logit_scale.exp()
-        item_score = logit_scale * image_features @ text_features.t()
+        item_score = logit_scale * image_featuers @ text_features.t()
         losses = {}
         loss = self.loss(logits=item_score)
         base_loss = {'base_loss': loss}
         losses.update(base_loss)
-        if self.args['prompt_type'] == 'hpi':
+        if self.args['prompt_type'] == 'lpi':
             temperature = 0.01
             visual_prompt_for_loss = torch.mean(visual_prompt, -1)
+            if len(visual_prompt_for_loss.shape) == 3:
+                visual_prompt_for_loss = torch.mean(visual_prompt_for_loss, 0)
             # visual_prompt_for_loss_norm = visual_prompt_for_loss / visual_prompt_for_loss.norm(dim=-1, keepdim=True)
             visual_prompt_for_loss = visual_prompt_for_loss / temperature
             textual_prompt_for_loss = torch.mean(textual_prompt, -1)
+            if len(textual_prompt_for_loss.shape) == 3:
+                textual_prompt_for_loss = torch.mean(textual_prompt_for_loss, 0)
             textual_prompt_for_loss = textual_prompt_for_loss / temperature
             # textual_prompt_for_loss_norm = textual_prompt_for_loss / textual_prompt_for_loss.norm(dim=-1, keepdim=True)
             # layer_score = visual_prompt_for_loss_norm @ textual_prompt_for_loss_norm.t()
             layer_score = visual_prompt_for_loss @ textual_prompt_for_loss.t()
             alignment_loss = {'alignment_loss': 0.1*self.alignment_loss(layer_score)}
             losses.update(alignment_loss)
-        if self.args['prompt_type'] == 'hpi' and self.numtask!=1:
+        if self.args['prompt_type'] == 'lpi' and self.numtask!=1:
             task_loss = {'task_loss': 0.1*self.cal_task_loss(self.numtask-1, visual_prompt_for_loss, textual_prompt_for_loss)}
             losses.update(task_loss)
         return {
             "loss": losses
         }
-
 
     def cal_task_loss(self, task_id, visual_prompt, textual_prompt): # [12,16], [12,16]
         task_id = task_id
@@ -187,7 +193,7 @@ class SliNet(nn.Module):
             b = []
             c = []
             for bid in range(len(text)):
-                if self.args['prompt_type'] == 'hpi':
+                if self.args['prompt_type'] == 'lpi':
                     textual_prompt = self.prompts[text_category[bid].item()]()[1]
                 else:
                     textual_prompt = self.textual_prompts[text_category[bid].item()]()
@@ -205,7 +211,7 @@ class SliNet(nn.Module):
 
     def visual_interface(self, image, image_category):
 
-        if self.args['prompt_type'] == 'hpi':
+        if self.args['prompt_type'] == 'lpi':
             instance_batch = torch.stack([i()[0] for i in self.prompts], 0)[image_category, :, :]
         else:
             instance_batch = torch.stack([i() for i in self.visual_prompts], 0)[image_category, :, :]

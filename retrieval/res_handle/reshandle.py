@@ -124,7 +124,7 @@ def get_res(filename,task_name='refcoco',task_type='val',n=12):
 # filename = './res/2024-04-06 06:04:17.874950.json'
 # filename = './res/2024-04-06 08:55:43.259643.json'
 # filename = './res/2024-04-06 18:17:41.105289.json'
-# filename = 'res/2024-04-06 19:38:46.414162_hpi_best.json'
+# filename = 'res/2024-04-06 19:38:46.414162_lpi_best.json'
 # filename = 'res/2024-04-06 21:15:55.409857_bestbest.json'
 # filename = './res/2024-04-06 22:48:35.043734.json'
 # filename = './res/2024-04-07 00:03:12.316331.json'
@@ -142,11 +142,11 @@ def get_res(filename,task_name='refcoco',task_type='val',n=12):
 # filename = './res/2024-04-07 14:34:08.240848.json' # e5 init 0.02
 # filename = './res/2024-04-07 14:11:01.302309.json'
 # sprompt e10 0.02
-filename = '../res/2024-04-07 16:49:45.568335.json'
-get_res(filename, 'mscoco', 'i2t',12)
+# filename = '../res/2024-04-07 16:49:45.568335.json'
+# get_res(filename, 'mscoco', 'i2t',12)
 
-get_res(filename, 'mscoco', 't2i',12)
-# # hpi e10
+# get_res(filename, 'mscoco', 't2i',12)
+# # lpi e10
 # filename = './res/2024-04-07 20:43:30.867178.json'
 # get_res(filename, 'mscoco', 'i2t',12)
 #
@@ -154,7 +154,10 @@ get_res(filename, 'mscoco', 't2i',12)
 
 # filename = './res/2024-04-07 22:09:13.556081.json'
 # filename = './res/2024-04-08 01:14:14.189740.json'
-filename = '../res/2024-04-09 20:13:34.397299.json'
-get_res(filename, 'mscoco', 'i2t',12)
+# filename = '../res/2024-04-09 20:13:34.397299.json'
+# get_res(filename, 'mscoco', 'i2t',12)
 
-get_res(filename, 'mscoco', 't2i',12)
+# get_res(filename, 'mscoco', 't2i',12)
+
+filename = '../res/2024-11-08 18:40:41.396589.json'
+get_res(filename, 'mscoco', 'i2t',12)

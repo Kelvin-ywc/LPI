@@ -159,14 +159,15 @@ class SPrompts(BaseLearner):
             # self._total_classes = self._known_classes + data_manager.get_task_size(self._cur_task)
             self._network.update_fc(self._total_classes)
 
-
+            
             train_dataset = Coco(image_root=self.args['image_root'], ann_file=self.args['annotation_train_root'], tasks=self._cur_task)
-
+            print(f'total training samples: {len(train_dataset)}')
 
             self.train_loader = DataLoader(train_dataset, batch_size=self.batch_size, shuffle=True,
                                            num_workers=self.num_workers)
 
             test_dataset = CocoEval(image_root=self.args['image_root'], ann_file=self.args['annotation_val_root'], tasks=np.arange(0, self.cur_id+1))
+            print(f'total testing samples: {len(test_dataset)}')
             self.test_loader = DataLoader(test_dataset, batch_size=128, shuffle=False,
                                           num_workers=self.num_workers)
 
@@ -243,16 +244,16 @@ class SPrompts(BaseLearner):
                 enabled.add(name)
         print(f"Parameters to be updated: {enabled}")
 
-        if self._cur_task==0:
-            optimizer = optim.SGD(self._network.parameters(), momentum=0.9,lr=self.init_lr,weight_decay=self.init_weight_decay)
-            scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer=optimizer,T_max=self.init_epoch)
-            self.run_epoch = self.init_epoch
-            return self.train_function(train_loader,test_loader,optimizer,scheduler)
-        else:
-            optimizer = optim.SGD(self._network.parameters(), momentum=0.9,lr=self.lrate,weight_decay=self.weight_decay)
-            scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer=optimizer,T_max=self.epochs)
-            self.run_epoch = self.epochs
-            return self.train_function(train_loader, test_loader, optimizer, scheduler)
+        # if self._cur_task==0:
+        #     optimizer = optim.SGD(self._network.parameters(), momentum=0.9,lr=self.init_lr,weight_decay=self.init_weight_decay)
+        #     scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer=optimizer,T_max=self.init_epoch)
+        #     self.run_epoch = self.init_epoch
+        #     return self.train_function(train_loader,test_loader,optimizer,scheduler)
+        # else:
+        optimizer = optim.SGD(self._network.parameters(), momentum=0.9,lr=self.lrate,weight_decay=self.weight_decay)
+        scheduler = optim.lr_scheduler.CosineAnnealingLR(optimizer=optimizer,T_max=self.epochs)
+        self.run_epoch = self.epochs
+        return self.train_function(train_loader, test_loader, optimizer, scheduler)
 
 
     def get_ground_truth(self, device, num_logits) -> torch.Tensor:
@@ -299,7 +300,10 @@ class SPrompts(BaseLearner):
             for i,  (images, captions, _, _) in enumerate(train_loader):
                 images = images.cuda()
                 captions = list(captions)
-                model_out = self._network(images, captions)
+                # model_out = self._network(images, captions)
+                image_features, text_features, visual_prompt, textual_prompt = self._network(images, captions)
+                # model_out = self._network.module.cal_loss(image_features, text_features, visual_prompt, textual_prompt)
+                model_out = self._network.cal_loss(image_features, text_features, visual_prompt, textual_prompt)
                 # loss = model_out['loss'].mean()
                 loss = sum(loss for loss in model_out['loss'].values())
                 optimizer.zero_grad()

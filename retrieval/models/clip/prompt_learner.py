@@ -141,8 +141,13 @@ class PromptLearner(nn.Module):
             ctx = ctx.unsqueeze(0).expand(self.n_cls, -1, -1)
 
         # FIXME: this is a hack to make it work with DDP
-        rank = os.environ['LOCAL_RANK']
-        embedding = embedding[rank*32: min((rank+1)*32, embedding.shape[0])]
+        # rank = os.environ['LOCAL_RANK']
+        # the following line requires multi-gpu in 
+        rank = torch.cuda.current_device()
+        total_rank = torch.cuda.device_count()
+        bs = embedding.shape[0] // total_rank
+        # embedding = embedding[rank*bs: min((rank+1)*bs, embedding.shape[0])]
+        # tokenized_prompts = tokenized_prompts[rank*bs: min((rank+1)*bs, tokenized_prompts.shape[0])]
 
         prefix = embedding[:, :1, :]
         suffix = embedding[:, 1 + self.n_ctx:, :]
