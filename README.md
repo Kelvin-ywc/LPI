@@ -2,7 +2,7 @@
 
 
 The code for image-text retrieval(retrieval) is based on  [S-prompts](https://github.com/iamwangyabin/S-Prompts).
-The code for referring expression comprehension(grounding) is based on [GLIP](https://github.com/microsoft/GLIP).
+The code for referring expression comprehension(grounding) is based on [GLIP](https://github.com/microsoft/GLIP). We follow [mdetr](https://github.com/ashkamath/mdetr) to prepare dataset.
 
 # Image-text Retrieval
 Annotations for image-text retrieval task is preprocessed based on the original annotations, which is available at the following Baidu Cloud link: https://pan.baidu.com/s/17wD4O8OwQSeV4qgBAIX4qQ?pwd=f0yv.
@@ -21,6 +21,17 @@ The results are generated in the retrieval/res directory, and post-processing of
 
 <!-- Some bugs need to be fixed... -->
 # Referring Expression Comprehension
+To run the grounding code, please first follow the instructions for installing the relevant packages for GLIP. First, install the necessary packages.
+```
+pip install einops shapely timm yacs tensorboardX ftfy prettytable pymongo
+pip install transformers 
+```
+Then, navigate to the lpi/grounding directory and install the maskrcnn_benchmark package in develop mode.
+```
+python setup.py build develop --user
+```
+Prepare GLIP-T(A) weight from this [GLIP-T(A) weight](https://huggingface.co/GLIPModel/GLIP/blob/main/glip_a_tiny_o365.pth) under `lpi/grounding/MODEL` folder. Prepare bert-base-uncased under `lpi/grounding/bert-base-uncased` folder, and prepare dataset [COCO2014](https://cocodataset.org/#download) under `lpi/grounding/DATASET` folder. We use annotations from [mdetr](https://github.com/ashkamath/mdetr/blob/main/.github/refexp.md).
+
 Run the following command for website playground.
 ```
 python grounding/webui/index.py
